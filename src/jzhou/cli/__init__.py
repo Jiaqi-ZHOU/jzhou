@@ -2,3 +2,4 @@
 """Module for the command line interface."""
 
 from .root import cmd_root
+from .shc import cmd_plotshc

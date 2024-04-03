@@ -47,7 +47,7 @@ def read_win(winfile):
     return VBM, CBM, c
 
 
-def plot(data, clength, fermi, CBM=None):
+def plot(data, clength, fermi, cbm=None):
     factor = 8.2164718e-05 * clength * 2 * np.pi
     e = data[:, 1] - fermi
     shc_e2h = data[:, 2] * factor
@@ -72,9 +72,9 @@ def plot(data, clength, fermi, CBM=None):
     plt.hlines(
         0, plt.xlim()[0], plt.xlim()[1], linestyles="--", linewidth=0.5, colors="grey"
     )
-    if CBM:
+    if cbm:
         plt.hlines(
-            CBM - fermi,
+            cbm - fermi,
             plt.xlim()[0],
             plt.xlim()[1],
             linestyles="--",
@@ -91,7 +91,7 @@ def plot(data, clength, fermi, CBM=None):
         1, plt.ylim()[0], plt.ylim()[1], linestyles="--", linewidth=0.5, colors="grey"
     )
     plt.text(plt.xlim()[0], 0, "VBM", fontsize=labelfont)
-    plt.text(plt.xlim()[0], CBM - fermi, "CBM", fontsize=labelfont)
+    plt.text(plt.xlim()[0], cbm - fermi, "CBM", fontsize=labelfont)
     plt.ylabel(r"$\mathrm{E - {E}_{F}}$ (eV)", fontsize=labelfont)
     plt.xlabel(r"SHC [$(\hbar/2e){e^2}/h$]", fontsize=labelfont, labelpad=0.2)
 
@@ -131,15 +131,15 @@ def main():
         VBM, CBM, c = read_win(args.win)
         fermi = VBM
         clength = c
-        plot(data, clength, fermi, CBM=CBM)
+        plot(data, clength, fermi, cbm=CBM)
 
     else:
         fermi = args.fermi
         clength = args.clength
         if args.CBM:
-            plot(data, clength, fermi, CBM=args.CBM)
+            plot(data, clength, fermi, cbm=args.CBM)
         else:
-            plot(data, clength, fermi, CBM=None)
+            plot(data, clength, fermi, cbm=None)
 
         # if file_contents:
         #     print(f"File contents of '{args.file}':")
