@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 """Command to plot figures."""
 import click
-
 from .root import cmd_root
 
 

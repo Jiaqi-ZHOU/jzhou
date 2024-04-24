@@ -3,3 +3,4 @@
 
 from .root import cmd_root
 from .shc import cmd_plotshc
+from .xmlbands import cmd_plotxmlbands
