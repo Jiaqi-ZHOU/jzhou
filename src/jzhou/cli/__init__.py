@@ -5,3 +5,4 @@ from .root import cmd_root
 from .shc import cmd_plotshc
 from .xmlbands import cmd_plotxmlbands
 from .xmlwanbands import cmd_plotxmlwanbands
+from .twoxmlbands import cmd_plottwoxmlbands

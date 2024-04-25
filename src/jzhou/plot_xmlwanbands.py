@@ -156,9 +156,9 @@ def plot_xml_wan_bands(xmlfile, wanfile, fakefermi=None):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Compare QE bands (aiida.xml) and Wannier bands (aiida_band.dat). \
-         Files xml and dat are  mandatory. \
-         The fakefermi is alternative (to set EF=0). "
+        description="Compare QE bands (xml) and Wannier bands (dat). \
+    xml and dat files are mandatory. \
+    The fakefermi is alternative (to set EF=0). "
     )
     parser.add_argument(
         "--xmlfile",

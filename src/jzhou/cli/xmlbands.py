@@ -6,7 +6,7 @@ from .root import cmd_root
 
 @cmd_root.command("plotxmlbands")
 @click.argument(
-    "file",
+    "--file",
     default="aiida.xml",
     type=str,
 )

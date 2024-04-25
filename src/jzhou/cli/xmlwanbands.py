@@ -28,6 +28,7 @@ def cmd_plotxmlwanbands(xmlfile, wanfile, fakefermi):
     """Compare QE bands (xml) and Wannier bands (dat). 
     
     xml and dat files are mandatory. 
+
     The fakefermi is alternative (to set EF=0). "
     """
     from ..plot_xmlwanbands import plot_xml_wan_bands

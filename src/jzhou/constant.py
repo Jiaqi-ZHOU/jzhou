@@ -7,4 +7,4 @@ class MyClass:
 fontsizes = MyClass(label=10, tick=8)
 
 
-colors=MyClass(blue="royalblue", green="limegreen")
+colors = MyClass(blue="royalblue", green="limegreen", red="tomato")
