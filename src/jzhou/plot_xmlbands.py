@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import numpy as np
 import matplotlib.pyplot as plt
 import math
@@ -9,8 +10,7 @@ from lxml import etree
 import argparse
 import xml.etree.ElementTree as ET
 
-labelfont = 10
-tickfont = 8
+from .constant import fontsizes, colors
 
 
 def extract_band_weight_xml(filename: str = "aiida.xml"):
@@ -157,7 +157,7 @@ def plot_bands(filename, fakefermi=None):
     # and the realfermi is extracted from eigenvales.
     if fakefermi == None:
         fermi = realfermi
-        plt.ylabel(r"$\mathregular{E - {E}_{F}}$ (eV)", fontsize=labelfont)
+        plt.ylabel(r"$\mathregular{E - {E}_{F}}$ (eV)", fontsize=fontsizes.label)
         plt.hlines(
             0, min(kpath), max(kpath), color="gray", linestyle="-", linewidth=0.5
         )
@@ -167,7 +167,7 @@ def plot_bands(filename, fakefermi=None):
         # mark the position of real fermi. 
     else:
         fermi = fakefermi
-        plt.ylabel(r"$Energy (eV)", fontsize=labelfont)
+        plt.ylabel(r"$Energy (eV)", fontsize=fontsizes.label)
         plt.hlines(
             realfermi,
             min(kpath),
@@ -183,38 +183,26 @@ def plot_bands(filename, fakefermi=None):
         plt.plot(kpath, bands[i, :] - fermi, color="k", linewidth=1)
     plt.xlim(min(kpath), max(kpath))
 
-    # def plot_ticks():
     nk = kpt_frac.shape[1]
-    # label_dict = {}
     tick_locs_list = []
     tick_labels_list = []
-
-
     thr = 1e-2
     ky = 0.57735027
     for i in range(nk):
-        # print(kpt_frac[:, i])
         if np.linalg.norm(kpt_frac[:, i]) < thr:
-            # print(i)
             G_loc = kpath[i]
             tick_locs_list.append(G_loc)
-            tick_labels_list.append("G")
-
-            # label_dict[G_idx] = r"$\mathregular{\Gamma}$"
+            tick_labels_list.append(r"$\mathregular{\Gamma}$")
         if np.linalg.norm(kpt_frac[:, i] - np.array([0, ky, 0])) < thr:
-            print("M loc" , i)
             M_loc = kpath[i]
             tick_locs_list.append(M_loc)
             tick_labels_list.append("M")
-
         if np.linalg.norm(kpt_frac[:, i] - np.array([1 / 3, ky, 0])) < thr:
             K_loc = kpath[i]
             tick_locs_list.append(K_loc)
             tick_labels_list.append("K")
 
     print(tick_locs_list, tick_labels_list )
-    # tick_locs_list = list(label_dict.keys())
-    # tick_labels_list = list(label_dict.values())
     for n in range(1, len(tick_locs_list)):
         plt.plot(
             [tick_locs_list[n], tick_locs_list[n]],
@@ -244,7 +232,6 @@ def main():
         "--fakefermi", type=float, help="The fake Fermi energy value given in command"
     )
     args = parser.parse_args()
-    # plot_bands(args.file)
     print("QE bands is given by", args.file)
 
     if args.fakefermi:
