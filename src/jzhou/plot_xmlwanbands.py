@@ -22,6 +22,8 @@ def get_wan_data(wannier_dat):
     # The output of open() is seperated string for every line
     seperated_str = file.readlines()
 
+    seperated_str = [line for line in seperated_str if not line.strip().startswith('#')]
+
     # Combine all string to be one long string
     combined_long_str = "".join(seperated_str)
 
@@ -42,6 +44,19 @@ def get_wan_data(wannier_dat):
 
     split_block_list_of_array = [np.fromstring(_, sep=" ") for _ in split_block if _]
 
+    # Wannier90 generate prefix_band.dat including 2 columns. 
+    # WannierTools generate bulkek.dat including 3 columns. 
+    # I need to tell the code which is the case. 
+    WT=None
+    check = len(split_block_list_of_array[-1])
+    if check % 3 == 0:
+        n = 3
+        WT=True
+    else:
+        n = 2
+        WT=False
+
+
     # Convert the list to array by adding one dimension (the number of nbnd(nwann))
     nbnd_kpt_energy = np.array(split_block_list_of_array)
     # The shape of nbnd_kpt_energy is (nbnd, nkpt_coor+nenergy)
@@ -49,17 +64,19 @@ def get_wan_data(wannier_dat):
     # The kpt_coor is the even line of the 2nd dimension
     # The energy is the odd line of the 2nd dimension
 
-    wan_kpt = nbnd_kpt_energy[0, 0::2]
-    wan_eig = nbnd_kpt_energy[:, 1::2]
+
+    wan_kpt = nbnd_kpt_energy[0, 0::n]
+    wan_eig = nbnd_kpt_energy[:, 1::n]
 
     wan_eig = wan_eig.T  # For plotting
 
-    return wan_kpt, wan_eig
+    return wan_kpt, wan_eig, WT
 
 
 def plot_xml_wan_bands(xmlfile, wanfile, fakefermi=None):
 
     kpt_frac, kpath, bands, realfermi = extract_band_weight_xml(xmlfile)
+    print("Fermi energy in xml is {:.4f}".format(realfermi) + " eV.")
 
     plt.subplots(figsize=(4, 3), dpi=300)
 
@@ -77,7 +94,7 @@ def plot_xml_wan_bands(xmlfile, wanfile, fakefermi=None):
     # mark the position of real fermi.
     else:
         fermi = fakefermi
-        plt.ylabel(r"$Energy (eV)", fontsize=fontsizes.label)
+        plt.ylabel(r"Energy (eV)", fontsize=fontsizes.label)
         plt.hlines(
             realfermi,
             min(kpath),
@@ -139,17 +156,21 @@ def plot_xml_wan_bands(xmlfile, wanfile, fakefermi=None):
         )
     plt.xticks(tick_locs_list, tick_labels_list)
 
-    wan_kpt, wan_eig = get_wan_data(wanfile)
-
+    wan_kpt, wan_eig, WT = get_wan_data(wanfile)
     plt.plot(wan_kpt, wan_eig - fermi, color=colors.blue, linewidth=1)
-    plt.plot(1e8, 1e8, color=colors.blue, linewidth=1, label=r"W90")
+
+    if WT == False:
+        plt.plot(1e8, 1e8, color=colors.blue, linewidth=1, label=r"W90")
+    elif WT == True:
+        plt.plot(1e8, 1e8, color=colors.blue, linewidth=1, label=r"WTools")
 
     plt.tick_params(axis="x", which="both", direction="in")
     plt.tick_params(axis="y", which="both", direction="in")
 
     ax = plt.gca()
     handles, labels = ax.get_legend_handles_labels()
-    ax.legend(handles[::-1], labels[::-1], loc="upper right")
+    ax.legend(loc="upper right")
+    # ax.legend(handles[::-1], labels[::-1], loc="upper right")
     plt.tight_layout()
     plt.show()
 
@@ -183,5 +204,5 @@ def main():
         print("A given Fermi energy =", args.fakefermi)
         plot_xml_wan_bands(filename=args.file, fakefermi=args.fakefermi)
     else:
-        print("Fermi energy is given by xml file")
+        print("Fermi energy is given by xml file. ")
         plot_xml_wan_bands(filename=args.file, fakefermi=None)
