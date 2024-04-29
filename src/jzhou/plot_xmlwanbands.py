@@ -73,7 +73,7 @@ def get_wan_data(wannier_dat):
     return wan_kpt, wan_eig, WT
 
 
-def plot_xml_wan_bands(xmlfile, wanfile, fakefermi=None):
+def plot_xml_wan_bands(xmlfile, wanfile, wanfile2, fakefermi=None):
 
     kpt_frac, kpath, bands, realfermi = extract_band_weight_xml(xmlfile)
     print("Fermi energy in xml is {:.4f}".format(realfermi) + " eV.")
@@ -156,13 +156,20 @@ def plot_xml_wan_bands(xmlfile, wanfile, fakefermi=None):
         )
     plt.xticks(tick_locs_list, tick_labels_list)
 
-    wan_kpt, wan_eig, WT = get_wan_data(wanfile)
-    plt.plot(wan_kpt, wan_eig - fermi, color=colors.blue, linewidth=1)
+    def plot_wan_bands(fermi, wanfile, color, linestyle):
+        wan_kpt, wan_eig, WT = get_wan_data(wanfile)
+        plt.plot(wan_kpt, wan_eig - fermi, color=color, linestyle = linestyle, linewidth=1)
 
-    if WT == False:
-        plt.plot(1e8, 1e8, color=colors.blue, linewidth=1, label=r"W90")
-    elif WT == True:
-        plt.plot(1e8, 1e8, color=colors.blue, linewidth=1, label=r"WTools")
+        if WT == False:
+            plt.plot(1e8, 1e8, color=color, linestyle = linestyle,  linewidth=1, label=r"W90")
+        elif WT == True:
+            plt.plot(1e8, 1e8, color=color, linestyle = linestyle,  linewidth=1, label=r"WTools")
+
+    if wanfile2 != None:
+        plot_wan_bands(fermi=fermi, wanfile=wanfile, color=colors.blue, linestyle="-")
+        plot_wan_bands(fermi=0, wanfile=wanfile2, color=colors.red, linestyle=":")
+    else:
+        plot_wan_bands(fermi=fermi, wanfile=wanfile, color=colors.blue, linestyle="-")
 
     plt.tick_params(axis="x", which="both", direction="in")
     plt.tick_params(axis="y", which="both", direction="in")
@@ -194,11 +201,18 @@ def main():
         help="The Wannier dat file, default is aiida_band.dat",
     )
     parser.add_argument(
+        "--wanfile2",
+        default="bulkek.dat",
+        type=str,
+        help="The Wannier dat file, default is bulkek.dat",
+    )
+    parser.add_argument(
         "--fakefermi", type=float, help="The fake Fermi energy value given in command"
     )
     args = parser.parse_args()
     print("DFT bands is given by", args.xmlfile)
     print("Wan bands is given by", args.wanfile)
+    print("Another wan bands is given by", args.wanfile2)
 
     if args.fakefermi:
         print("A given Fermi energy =", args.fakefermi)

@@ -18,13 +18,19 @@ from .root import cmd_root
         # help="The Wannier dat file, default is aiida_band.dat",
     )
 @click.option(
+    "--wanfile2",                
+    # "-w2",
+    type=str,
+    # help="The fake Fermi energy value given in command"
+)
+@click.option(
     "-f",
     "--fakefermi",
     type=float,
     # help="The fake Fermi energy value given in command"
 )
 
-def cmd_plotxmlwanbands(xmlfile, wanfile, fakefermi):
+def cmd_plotxmlwanbands(xmlfile, wanfile, wanfile2, fakefermi):
     """Compare QE bands (xml) and Wannier bands (dat). 
     
     xml and dat files are mandatory. 
@@ -36,10 +42,21 @@ def cmd_plotxmlwanbands(xmlfile, wanfile, fakefermi):
     # file = "aiida.xml"
     print("DFT bands is given by", xmlfile)
     print("Wan bands is given by", wanfile)
+    if wanfile2:
+        print("Another wan bands is given by", wanfile2)
 
     if fakefermi:
-        print("Fermi energy is given as: ", fakefermi)
-        plot_xml_wan_bands(xmlfile, wanfile, fakefermi)
+        if wanfile2:
+            print("Fermi energy is given as: ", fakefermi)
+            plot_xml_wan_bands(xmlfile, wanfile, wanfile2, fakefermi)
+        else:
+            print("Fail. The function of fake fermi & none wanfile2 is unable.")
+        #     print("Fermi energy is given as: ", fakefermi)
+        #     plot_xml_wan_bands(xmlfile, wanfile, wanfile2=None, fakefermi)
     else:
-        print("Fermi energy is given by xml file. ")
-        plot_xml_wan_bands(xmlfile, wanfile, fakefermi=None)
+        if wanfile:
+            print("Fermi energy is given by xml file. ")
+            plot_xml_wan_bands(xmlfile, wanfile, wanfile2, fakefermi=None)
+        else:
+            print("Fermi energy is given by xml file. ")
+            plot_xml_wan_bands(xmlfile, wanfile, wanfile2=None, fakefermi=None)    
