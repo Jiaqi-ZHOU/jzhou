@@ -48,14 +48,15 @@ def get_wan_data(wannier_dat):
     # WannierTools generate bulkek.dat including 3 columns. 
     # I need to tell the code which is the case. 
     WT=None
-    check = len(split_block_list_of_array[-1])
-    if check % 3 == 0:
-        n = 3
-        WT=True
-    else:
-        n = 2
-        WT=False
-
+    with open(wannier_dat, "r") as file:
+        lines = file.readlines()
+        # ['#', 'klen', 'E', '|', 'projection', '|group', '1:', 'A', '|group']
+        if len(lines[0].split()) == 9:
+            n = 3
+            WT=True
+        else:
+            n = 2
+            WT=False
 
     # Convert the list to array by adding one dimension (the number of nbnd(nwann))
     nbnd_kpt_energy = np.array(split_block_list_of_array)
@@ -72,6 +73,17 @@ def get_wan_data(wannier_dat):
 
     return wan_kpt, wan_eig, WT
 
+def find_occ_nbnd(xmlfile, wanfile):
+    wan_kpt, wan_eig, WT = get_wan_data(wanfile)
+    kpt_frac, kpath, bands, realfermi = extract_band_weight_xml(xmlfile)
+    nbnd = wan_eig.shape[1]
+    ib = []
+    for i in range(nbnd):
+        # print(wan_eig[:, i].all())
+        if np.all(wan_eig[:, i] < realfermi + 0.025):
+           ib.append(i)
+    occ_nbnd = int(max(ib)) + 1
+    print(f"{occ_nbnd=}")
 
 def plot_xml_wan_bands(xmlfile, wanfile, wanfile2, fakefermi=None):
 
@@ -130,14 +142,14 @@ def plot_xml_wan_bands(xmlfile, wanfile, wanfile2, fakefermi=None):
     nk = kpt_frac.shape[1]
     tick_locs_list = []
     tick_labels_list = []
-    thr = 1e-2
+    thr = 1e-2/2
     ky = 0.57735027
     for i in range(nk):
         if np.linalg.norm(kpt_frac[:, i]) < thr:
             G_loc = kpath[i]
             tick_locs_list.append(G_loc)
             tick_labels_list.append(r"$\mathregular{\Gamma}$")
-        if np.linalg.norm(kpt_frac[:, i] - np.array([0, ky, 0])) < thr:
+        if np.linalg.norm(kpt_frac[:, i] - np.array([0.5, ky/2, 0])) < thr or np.linalg.norm(kpt_frac[:, i] - np.array([0, ky, 0])) < thr:
             M_loc = kpath[i]
             tick_locs_list.append(M_loc)
             tick_labels_list.append("M")
@@ -167,7 +179,7 @@ def plot_xml_wan_bands(xmlfile, wanfile, wanfile2, fakefermi=None):
 
     if wanfile2 != None:
         plot_wan_bands(fermi=fermi, wanfile=wanfile, color=colors.blue, linestyle="-")
-        plot_wan_bands(fermi=0, wanfile=wanfile2, color=colors.red, linestyle=":")
+        plot_wan_bands(fermi=fermi, wanfile=wanfile2, color=colors.red, linestyle=":")
     else:
         plot_wan_bands(fermi=fermi, wanfile=wanfile, color=colors.blue, linestyle="-")
 
@@ -217,6 +229,8 @@ def main():
     if args.fakefermi:
         print("A given Fermi energy =", args.fakefermi)
         plot_xml_wan_bands(filename=args.file, fakefermi=args.fakefermi)
+        find_occ_nbnd(filename=args.file)
     else:
         print("Fermi energy is given by xml file. ")
         plot_xml_wan_bands(filename=args.file, fakefermi=None)
+        find_occ_nbnd(filename=args.file)

@@ -37,7 +37,7 @@ def cmd_plotxmlwanbands(xmlfile, wanfile, wanfile2, fakefermi):
 
     The fakefermi is alternative (to set EF=0). "
     """
-    from ..plot_xmlwanbands import plot_xml_wan_bands
+    from ..plot_xmlwanbands import plot_xml_wan_bands, find_occ_nbnd
 
     # file = "aiida.xml"
     print("DFT bands is given by", xmlfile)
@@ -48,6 +48,7 @@ def cmd_plotxmlwanbands(xmlfile, wanfile, wanfile2, fakefermi):
     if fakefermi:
         if wanfile2:
             print("Fermi energy is given as: ", fakefermi)
+            find_occ_nbnd(xmlfile, wanfile)    
             plot_xml_wan_bands(xmlfile, wanfile, wanfile2, fakefermi)
         else:
             print("Fail. The function of fake fermi & none wanfile2 is unable.")
@@ -56,7 +57,9 @@ def cmd_plotxmlwanbands(xmlfile, wanfile, wanfile2, fakefermi):
     else:
         if wanfile:
             print("Fermi energy is given by xml file. ")
+            find_occ_nbnd(xmlfile, wanfile)    
             plot_xml_wan_bands(xmlfile, wanfile, wanfile2, fakefermi=None)
         else:
             print("Fermi energy is given by xml file. ")
-            plot_xml_wan_bands(xmlfile, wanfile, wanfile2=None, fakefermi=None)    
+            find_occ_nbnd(xmlfile, wanfile)    
+            plot_xml_wan_bands(xmlfile, wanfile, wanfile2=None, fakefermi=None)
