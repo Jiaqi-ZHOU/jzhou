@@ -8,3 +8,10 @@ fontsizes = MyClass(label=10, tick=8)
 
 
 colors = MyClass(blue="royalblue", green="limegreen", red="tomato")
+
+linestyles = MyClass(
+    solid="solid",
+    dotted="dotted",
+    dashed="dashed",
+    dashdot="dashdot",
+)
