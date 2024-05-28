@@ -100,7 +100,8 @@ def plot_xml_wan_bands(xmlfile, wanfile, wanfile2, fakefermi=None):
         plt.hlines(
             0, min(kpath), max(kpath), color="gray", linestyle="-", linewidth=0.5
         )
-        plt.ylim(-3, 3)
+        plt.ylim(-1.6, 1.6)
+        plt.ylim(-2, 2)
 
     # If a fakefermi is given (probably as 0), I will want to
     # mark the position of real fermi.
@@ -143,7 +144,7 @@ def plot_xml_wan_bands(xmlfile, wanfile, wanfile2, fakefermi=None):
     tick_locs_list = []
     tick_labels_list = []
     thr = 1e-2/2
-    ky = 0.57735027
+    ky = 0.57735027 
     for i in range(nk):
         if np.linalg.norm(kpt_frac[:, i]) < thr:
             G_loc = kpath[i]
@@ -153,10 +154,34 @@ def plot_xml_wan_bands(xmlfile, wanfile, wanfile2, fakefermi=None):
             M_loc = kpath[i]
             tick_locs_list.append(M_loc)
             tick_labels_list.append("M")
-        if np.linalg.norm(kpt_frac[:, i] - np.array([1 / 3, ky, 0])) < thr:
+        if np.linalg.norm(kpt_frac[:, i] - np.array([1 / 3, ky, 0])) < thr  or  np.linalg.norm(kpt_frac[:, i] - np.array([2/ 3, 0, 0])) < thr:
             K_loc = kpath[i]
             tick_locs_list.append(K_loc)
             tick_labels_list.append("K")
+    # For alphaBi
+    # nk = kpt_frac.shape[1]
+    # tick_locs_list = []
+    # tick_labels_list = []
+    # thr = 5e-3
+    # kx = 0.5
+    # ky = 4.664826304030108E-001
+    # for i in range(nk):
+    #     if np.linalg.norm(kpt_frac[:, i]) < thr:
+    #         G_loc = kpath[i]
+    #         tick_locs_list.append(G_loc)
+    #         tick_labels_list.append(r"$\mathregular{\Gamma}$")
+    #     if np.linalg.norm(kpt_frac[:, i] - np.array([kx, 0, 0])) < thr or np.linalg.norm(kpt_frac[:, i] - np.array([kx, 0, 0])) < thr:
+    #         X_loc = kpath[i]
+    #         tick_locs_list.append(X_loc)
+    #         tick_labels_list.append("X")
+    #     if np.linalg.norm(kpt_frac[:, i] - np.array([0, ky, 0])) < thr or np.linalg.norm(kpt_frac[:, i] - np.array([0, ky, 0])) < thr:
+    #         Y_loc = kpath[i]
+    #         tick_locs_list.append(Y_loc)
+    #         tick_labels_list.append("Y")
+    #     if np.linalg.norm(kpt_frac[:, i] - np.array([kx, ky, 0])) < thr:
+    #         M_loc = kpath[i]
+    #         tick_locs_list.append(M_loc)
+    #         tick_labels_list.append("M")
 
     for n in range(1, len(tick_locs_list)):
         plt.plot(
@@ -191,6 +216,7 @@ def plot_xml_wan_bands(xmlfile, wanfile, wanfile2, fakefermi=None):
     ax.legend(loc="upper right")
     # ax.legend(handles[::-1], labels[::-1], loc="upper right")
     plt.tight_layout()
+    # plt.savefig("xmlwanbands.png")
     plt.show()
 
 

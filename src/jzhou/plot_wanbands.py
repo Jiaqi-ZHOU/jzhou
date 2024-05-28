@@ -25,9 +25,9 @@ def plot_wan_bands(wanfile, wanfile2, fakefermi=0):
         plt.plot(wan_kpt, wan_eig - fermi, color=color, linestyle = linestyle, linewidth=1)
 
         if WT == False:
-            plt.plot(1e8, 1e8, color=color, linestyle = linestyle,  linewidth=1, label=r"W90")
+            plt.plot(0, 0, color=color, linestyle = linestyle,  linewidth=1, label=r"W90")
         elif WT == True:
-            plt.plot(1e8, 1e8, color=color, linestyle = linestyle,  linewidth=1, label=r"WTools")
+            plt.plot(0, 0, color=color, linestyle = linestyle,  linewidth=1, label=r"WTools")
 
         if fermi != 0:
             plt.ylabel(r"$\mathregular{E - {E}_{F}}$ (eV)", fontsize=fontsizes.label)

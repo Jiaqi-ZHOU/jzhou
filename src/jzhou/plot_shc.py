@@ -52,8 +52,8 @@ def plot(data, clength, fermi, cbm=None):
     e = data[:, 1] - fermi
     shc_e2h = data[:, 2] * factor
 
-    plt.figure(figsize=(3, 6), dpi=300)  # plt.figure  should be at this location
-    plt.plot(shc_e2h, e, color="royalblue", linewidth=1)
+    plt.figure(figsize=(1.7, 3), dpi=300)  # plt.figure  should be at this location
+    plt.plot(shc_e2h, e, color="red", linewidth=1.5)
 
     minshc = np.min(shc_e2h)
     maxshc = np.max(shc_e2h)
@@ -68,7 +68,8 @@ def plot(data, clength, fermi, cbm=None):
         maxshc = 5
     factor = 1.1
     plt.xlim([minshc * factor, maxshc * factor])
-    plt.ylim(-2, 2)
+    plt.xlim(-0.2, 4.5)
+    plt.ylim(-1.6, 1.6)
     plt.hlines(
         0, plt.xlim()[0], plt.xlim()[1], linestyles="--", linewidth=0.5, colors="grey"
     )
@@ -81,21 +82,21 @@ def plot(data, clength, fermi, cbm=None):
             linewidth=0.5,
             colors="grey",
         )
-    plt.vlines(
-        -1, plt.ylim()[0], plt.ylim()[1], linestyles="--", linewidth=0.5, colors="grey"
-    )
+    # plt.vlines(
+    #     -1, plt.ylim()[0], plt.ylim()[1], linestyles="--", linewidth=0.5, colors="grey"
+    # )
     plt.vlines(
         0, plt.ylim()[0], plt.ylim()[1], linestyles="--", linewidth=0.5, colors="grey"
     )
     plt.vlines(
-        1, plt.ylim()[0], plt.ylim()[1], linestyles="--", linewidth=0.5, colors="grey"
+        4, plt.ylim()[0], plt.ylim()[1], linestyles="--", linewidth=0.5, colors="grey"
     )
     plt.text(plt.xlim()[0], 0, "VBM", fontsize=labelfont)
     plt.text(plt.xlim()[0], cbm - fermi, "CBM", fontsize=labelfont)
     plt.ylabel(r"$\mathrm{E - {E}_{F}}$ (eV)", fontsize=labelfont)
-    plt.xlabel(r"SHC [$(\hbar/2e){e^2}/h$]", fontsize=labelfont, labelpad=0.2)
+    plt.xlabel(r"SHC [$(\hbar/2e){e^2}/h$]", fontsize=labelfont-1, labelpad=0.2)
 
-    plt.xticks(fontsize=tickfont)
+    # plt.xticks([0, 4], [0, 4], fontsize=tickfont)
     plt.yticks(fontsize=tickfont)
     plt.tick_params(axis="x", which="both", direction="in")
     plt.tick_params(axis="y", which="both", direction="in")

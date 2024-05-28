@@ -6,7 +6,7 @@ from .root import cmd_root
 
 @cmd_root.command("plotxmlbands")
 @click.argument(
-    "--file",
+    "file",
     default="aiida.xml",
     type=str,
 )
@@ -19,8 +19,7 @@ from .root import cmd_root
 def cmd_plotxmlbands(file, fakefermi):
     """Plot QE bands using xml file.
 
-    shc.dat is mandatory, default is aiida-shc-fermiscan.dat.
-    win is alternative, default is aiida.win.
+    shc.dat is mandatory, default is aiida.xml.
     """
     from ..plot_xmlbands import extract_band_weight_xml, gen_info, plot_bands
 
