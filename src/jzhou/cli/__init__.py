@@ -9,3 +9,4 @@ from .twoxmlbands import cmd_plottwoxmlbands
 from .wanbands import cmd_plotwanbands
 from .freqbands import cmd_plotfreqbands
 from .vaspbands import cmd_plotvaspbands
+from .vaspwanbands import cmd_plotvaspwanbands

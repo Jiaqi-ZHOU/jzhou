@@ -191,7 +191,7 @@ def main():
     )
     parser.add_argument(
         "--dirname",
-        default="aiida.xml",
+        default="./",
         type=str,
         help="The dirname providing EIGENVAL, KPOINTS, POSCAR, OUTCAR, default is './'"
     )
