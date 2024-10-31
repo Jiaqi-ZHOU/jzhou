@@ -4,7 +4,7 @@ class MyClass:
             setattr(self, key, value)
 
 
-fontsizes = MyClass(label=10, tick=8)
+fontsizes = MyClass(label=14, tick=12)
 
 
 colors = MyClass(blue="royalblue", green="limegreen", red="tomato", grey="grey")
