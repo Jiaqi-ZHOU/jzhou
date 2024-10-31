@@ -9,39 +9,35 @@ from .root import cmd_root
     "file",
     default="aiida-shc-fermiscan.dat",
     type=str,
+    # help="The shc data. Default is aiida-shc-fermiscan.dat. ",
 )
-@click.option(
-    "-w",
-    "--win",
+@click.argument(
+    "win",
     default="aiida.win",
     type=str,
-    help="The win input, default is aiida.win",
+    # help="The Wannier input. Default is aiida.win. ",
 )
-@click.option("--fermi", type=float, help="The Fermi energy")
-@click.option("--clength", type=float, help="The cell c length in ang")
-@click.option("--cbm", type=float, help="The cbm of semiconductor")
-def cmd_plotshc(file, win, fermi, clength, cbm):
-    """Plot shc vs energy. 
-    
+def cmd_plotshc(file, win):
+    """Plot shc vs energy.
+
     shc.dat is mandatory, default is aiida-shc-fermiscan.dat.
-    win is alternative, default is aiida.win. 
+    win is mandatory, default is aiida.win.
     """
     from ..plot_shc import read_file, read_win, plot
-    
+
     data = read_file(file)
     print("shc.dat file is given by", file)
-
-    if win:
-        print("win file is given by", win)
-        VBM, cbm, c = read_win(win)
-        fermi = VBM
-        clength = c
-        plot(data, clength, fermi, cbm=cbm)
-
+    print("win file is given by", win)
+    fermi, vbm, cbm, c = read_win(win)
+    if cbm - vbm > 1e-6:  # This is an insulator
+        fermi = vbm
+        print("This is a insulator")
+        print(f"{cbm=}")
+        print(f"{vbm=}")
+        print("Bandgap=", cbm - vbm)
     else:
         fermi = fermi
-        clength = clength
-        if cbm:
-            plot(data, clength, fermi, cbm=cbm)
-        else:
-            plot(data, clength, fermi, cbm=None)
+        print("This is a metal")
+        print(f"{fermi=}")
+    clength = c
+    plot(data, clength, fermi, vbm, cbm=cbm)
