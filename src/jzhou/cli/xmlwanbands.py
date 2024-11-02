@@ -57,9 +57,9 @@ def cmd_plotxmlwanbands(xmlfile, wanfile, wanfile2, fakefermi):
     else:
         if wanfile:
             print("Fermi energy is given by xml file. ")
-            find_occ_nbnd(xmlfile, wanfile)    
+            # find_occ_nbnd(xmlfile, wanfile)    
             plot_xml_wan_bands(xmlfile, wanfile, wanfile2, fakefermi=None)
         else:
             print("Fermi energy is given by xml file. ")
-            find_occ_nbnd(xmlfile, wanfile)    
+            # find_occ_nbnd(xmlfile, wanfile)    
             plot_xml_wan_bands(xmlfile, wanfile, wanfile2=None, fakefermi=None)

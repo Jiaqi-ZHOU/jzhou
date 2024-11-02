@@ -90,7 +90,7 @@ def plot_xml_wan_bands(xmlfile, wanfile, wanfile2, fakefermi=None):
     kpt_frac, kpath, bands, realfermi = extract_band_weight_xml(xmlfile)
     print("Fermi energy in xml is {:.4f}".format(realfermi) + " eV.")
 
-    plt.subplots(figsize=(4, 3), dpi=300)
+    plt.subplots(figsize=(4, 3), dpi=144)
 
     # If a fakefermi is not given, we use the real fermi to plot bands,
     # and the realfermi is extracted from eigenvales.
