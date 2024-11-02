@@ -151,7 +151,7 @@ def plot_bands(filename, fakefermi=None):
 
     kpt_frac, kpath, bands, realfermi = extract_band_weight_xml(filename)
 
-    plt.subplots(figsize=(4, 3), dpi=300)
+    plt.subplots(figsize=(4, 3), dpi=144)
 
     # If a fakefermi is not given, we use the real fermi to plot bands,
     # and the realfermi is extracted from eigenvales.
@@ -167,7 +167,7 @@ def plot_bands(filename, fakefermi=None):
         # mark the position of real fermi. 
     else:
         fermi = fakefermi
-        plt.ylabel(r"$Energy (eV)", fontsize=fontsizes.label)
+        plt.ylabel(r"Energy (eV)", fontsize=fontsizes.label)
         plt.hlines(
             realfermi,
             min(kpath),
@@ -197,12 +197,16 @@ def plot_bands(filename, fakefermi=None):
             M_loc = kpath[i]
             tick_locs_list.append(M_loc)
             tick_labels_list.append("M")
+        if np.linalg.norm(kpt_frac[:, i] - np.array([0.5, ky/2, 0])) < thr:
+            M_loc = kpath[i]
+            tick_locs_list.append(M_loc)
+            tick_labels_list.append("M")
         if np.linalg.norm(kpt_frac[:, i] - np.array([1 / 3, ky, 0])) < thr:
             K_loc = kpath[i]
             tick_locs_list.append(K_loc)
             tick_labels_list.append("K")
 
-    print(tick_locs_list, tick_labels_list )
+    # print(tick_locs_list, tick_labels_list )
     for n in range(1, len(tick_locs_list)):
         plt.plot(
             [tick_locs_list[n], tick_locs_list[n]],
@@ -235,9 +239,9 @@ def main():
     print("QE bands is given by", args.file)
 
     if args.fakefermi:
-        print("A given Fermi energy =", args.fakefermi)
+        # print("A given Fermi energy =", args.fakefermi)
         plot_bands(filename = args.file, fakefermi = args.fakefermi)
     else:
-        print("Fermi energy is given by xml file")
+        # print("Fermi energy is given by xml file")
         plot_bands(filename = args.file, fakefermi = None)
 

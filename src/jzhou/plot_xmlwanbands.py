@@ -216,7 +216,7 @@ def plot_xml_wan_bands(xmlfile, wanfile, wanfile2, fakefermi=None):
     ax.legend(loc="upper right")
     # ax.legend(handles[::-1], labels[::-1], loc="upper right")
     plt.tight_layout()
-    # plt.savefig("xmlwanbands.png")
+    plt.savefig("xmlwanbands.png")
     plt.show()
 
 
@@ -255,8 +255,8 @@ def main():
     if args.fakefermi:
         print("A given Fermi energy =", args.fakefermi)
         plot_xml_wan_bands(filename=args.file, fakefermi=args.fakefermi)
-        find_occ_nbnd(filename=args.file)
+        # find_occ_nbnd(filename=args.file)
     else:
         print("Fermi energy is given by xml file. ")
         plot_xml_wan_bands(filename=args.file, fakefermi=None)
-        find_occ_nbnd(filename=args.file)
+        # find_occ_nbnd(filename=args.file)
