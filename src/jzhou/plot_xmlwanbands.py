@@ -22,7 +22,7 @@ def get_wan_data(wannier_dat):
     # The output of open() is seperated string for every line
     seperated_str = file.readlines()
 
-    seperated_str = [line for line in seperated_str if not line.strip().startswith('#')]
+    seperated_str = [line for line in seperated_str if not line.strip().startswith("#")]
 
     # Combine all string to be one long string
     combined_long_str = "".join(seperated_str)
@@ -44,19 +44,19 @@ def get_wan_data(wannier_dat):
 
     split_block_list_of_array = [np.fromstring(_, sep=" ") for _ in split_block if _]
 
-    # Wannier90 generate prefix_band.dat including 2 columns. 
-    # WannierTools generate bulkek.dat including 3 columns. 
-    # I need to tell the code which is the case. 
-    WT=None
+    # Wannier90 generate prefix_band.dat including 2 columns.
+    # WannierTools generate bulkek.dat including 3 columns.
+    # I need to tell the code which is the case.
+    WT = None
     with open(wannier_dat, "r") as file:
         lines = file.readlines()
         # ['#', 'klen', 'E', '|', 'projection', '|group', '1:', 'A', '|group']
         if len(lines[0].split()) == 9:
             n = 3
-            WT=True
+            WT = True
         else:
             n = 2
-            WT=False
+            WT = False
 
     # Convert the list to array by adding one dimension (the number of nbnd(nwann))
     nbnd_kpt_energy = np.array(split_block_list_of_array)
@@ -65,13 +65,13 @@ def get_wan_data(wannier_dat):
     # The kpt_coor is the even line of the 2nd dimension
     # The energy is the odd line of the 2nd dimension
 
-
     wan_kpt = nbnd_kpt_energy[0, 0::n]
     wan_eig = nbnd_kpt_energy[:, 1::n]
 
     wan_eig = wan_eig.T  # For plotting
 
     return wan_kpt, wan_eig, WT
+
 
 def find_occ_nbnd(xmlfile, wanfile):
     wan_kpt, wan_eig, WT = get_wan_data(wanfile)
@@ -81,9 +81,10 @@ def find_occ_nbnd(xmlfile, wanfile):
     for i in range(nbnd):
         # print(wan_eig[:, i].all())
         if np.all(wan_eig[:, i] < realfermi + 0.025):
-           ib.append(i)
+            ib.append(i)
     occ_nbnd = int(max(ib)) + 1
     print(f"{occ_nbnd=}")
+
 
 def plot_xml_wan_bands(xmlfile, wanfile, wanfile2, fakefermi=None):
 
@@ -143,18 +144,24 @@ def plot_xml_wan_bands(xmlfile, wanfile, wanfile2, fakefermi=None):
     nk = kpt_frac.shape[1]
     tick_locs_list = []
     tick_labels_list = []
-    thr = 1e-2/2
-    ky = 0.57735027 
+    thr = 1e-2 / 2
+    ky = 0.57735027
     for i in range(nk):
         if np.linalg.norm(kpt_frac[:, i]) < thr:
             G_loc = kpath[i]
             tick_locs_list.append(G_loc)
             tick_labels_list.append(r"$\mathregular{\Gamma}$")
-        if np.linalg.norm(kpt_frac[:, i] - np.array([0.5, ky/2, 0])) < thr or np.linalg.norm(kpt_frac[:, i] - np.array([0, ky, 0])) < thr:
+        if (
+            np.linalg.norm(kpt_frac[:, i] - np.array([0.5, ky / 2, 0])) < thr
+            or np.linalg.norm(kpt_frac[:, i] - np.array([0, ky, 0])) < thr
+        ):
             M_loc = kpath[i]
             tick_locs_list.append(M_loc)
             tick_labels_list.append("M")
-        if np.linalg.norm(kpt_frac[:, i] - np.array([1 / 3, ky, 0])) < thr  or  np.linalg.norm(kpt_frac[:, i] - np.array([2/ 3, 0, 0])) < thr:
+        if (
+            np.linalg.norm(kpt_frac[:, i] - np.array([1 / 3, ky, 0])) < thr
+            or np.linalg.norm(kpt_frac[:, i] - np.array([2 / 3, 0, 0])) < thr
+        ):
             K_loc = kpath[i]
             tick_locs_list.append(K_loc)
             tick_labels_list.append("K")
@@ -195,12 +202,18 @@ def plot_xml_wan_bands(xmlfile, wanfile, wanfile2, fakefermi=None):
 
     def plot_wan_bands(fermi, wanfile, color, linestyle):
         wan_kpt, wan_eig, WT = get_wan_data(wanfile)
-        plt.plot(wan_kpt, wan_eig - fermi, color=color, linestyle = linestyle, linewidth=1)
+        plt.plot(
+            wan_kpt, wan_eig - fermi, color=color, linestyle=linestyle, linewidth=1
+        )
 
         if WT == False:
-            plt.plot(1e8, 1e8, color=color, linestyle = linestyle,  linewidth=1, label=r"W90")
+            plt.plot(
+                1e8, 1e8, color=color, linestyle=linestyle, linewidth=1, label=r"W90"
+            )
         elif WT == True:
-            plt.plot(1e8, 1e8, color=color, linestyle = linestyle,  linewidth=1, label=r"WTools")
+            plt.plot(
+                1e8, 1e8, color=color, linestyle=linestyle, linewidth=1, label=r"WTools"
+            )
 
     if wanfile2 != None:
         plot_wan_bands(fermi=fermi, wanfile=wanfile, color=colors.blue, linestyle="-")

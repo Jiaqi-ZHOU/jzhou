@@ -163,8 +163,8 @@ def plot_bands(filename, fakefermi=None):
         )
         plt.ylim(-3, 3)
 
-    # If a fakefermi is given (probably as 0), I will want to 
-        # mark the position of real fermi. 
+    # If a fakefermi is given (probably as 0), I will want to
+    # mark the position of real fermi.
     else:
         fermi = fakefermi
         plt.ylabel(r"Energy (eV)", fontsize=fontsizes.label)
@@ -186,22 +186,24 @@ def plot_bands(filename, fakefermi=None):
     nk = kpt_frac.shape[1]
     tick_locs_list = []
     tick_labels_list = []
-    thr = 1e-2
+    thr = 1e-2 / 2
     ky = 0.57735027
     for i in range(nk):
         if np.linalg.norm(kpt_frac[:, i]) < thr:
             G_loc = kpath[i]
             tick_locs_list.append(G_loc)
             tick_labels_list.append(r"$\mathregular{\Gamma}$")
-        if np.linalg.norm(kpt_frac[:, i] - np.array([0, ky, 0])) < thr:
+        if (
+            np.linalg.norm(kpt_frac[:, i] - np.array([0.5, ky / 2, 0])) < thr
+            or np.linalg.norm(kpt_frac[:, i] - np.array([0, ky, 0])) < thr
+        ):
             M_loc = kpath[i]
             tick_locs_list.append(M_loc)
             tick_labels_list.append("M")
-        if np.linalg.norm(kpt_frac[:, i] - np.array([0.5, ky/2, 0])) < thr:
-            M_loc = kpath[i]
-            tick_locs_list.append(M_loc)
-            tick_labels_list.append("M")
-        if np.linalg.norm(kpt_frac[:, i] - np.array([1 / 3, ky, 0])) < thr:
+        if (
+            np.linalg.norm(kpt_frac[:, i] - np.array([1 / 3, ky, 0])) < thr
+            or np.linalg.norm(kpt_frac[:, i] - np.array([2 / 3, 0, 0])) < thr
+        ):
             K_loc = kpath[i]
             tick_locs_list.append(K_loc)
             tick_labels_list.append("K")
@@ -240,8 +242,7 @@ def main():
 
     if args.fakefermi:
         # print("A given Fermi energy =", args.fakefermi)
-        plot_bands(filename = args.file, fakefermi = args.fakefermi)
+        plot_bands(filename=args.file, fakefermi=args.fakefermi)
     else:
         # print("Fermi energy is given by xml file")
-        plot_bands(filename = args.file, fakefermi = None)
-
+        plot_bands(filename=args.file, fakefermi=None)
