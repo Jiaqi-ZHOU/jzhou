@@ -5,14 +5,14 @@ import click
 from .root import cmd_root
 
 
-@cmd_root.command("plottwoxmlbands", context_settings={'show_default': True})
+@cmd_root.command("plottwoxmlbands")
 @click.argument(
     "xmlfile1",
     type=str,
 )
 @click.option(
-    "-l1",
     "--label1",
+    "-l1",
     default="label1",
     type=str,
     help="Legend for the 1st xml file"
@@ -22,14 +22,14 @@ from .root import cmd_root
     type=str,
 )
 @click.option(
-    "-l2",
     "--label2",
+    "-l2",
     default="label2",
     type=str,
     help="Legend for the 2nd xml file"
 )
 @click.option(
-    "-f", "--fakefermi", default=None, type=float, help="Fermi energy for plotting. If given, eigenvalues will be shifted by this value."
+    "--fakefermi", "-f", default=None, type=float, help="Fermi energy for plotting. If given, eigenvalues will be shifted by this value."
 )
 def cmd_plottwoxmlbands(xmlfile1, xmlfile2, label1, label2, fakefermi):
     """Compare two DFT bands using two xml files."""

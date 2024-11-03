@@ -12,14 +12,15 @@ from .root import cmd_root
     type=str,
 )
 @click.option(
-    "-m", "--matdyn", type=str, help="The file to provide qpoints and labels.",
+    "--matdyn",
+    "-m",
+    type=str,
+    help="The file to provide qpoints and labels.",
 )
 def cmd_plotfreqbands(freqfile, matdyn):
-    """Plot QE phonon bands using freq file.
+    """Plot QE phonon bands.
 
-    freq file is mandatory, default is aiida.freq.
-
-    Formatted matdyn.in is optinal.
+    Freq data is given by freq file, the qpoint labels can be given by the optional matdyn.in.
     """
     from ..plot_freqbands import plot_freq_bands, plot_freq_bands_matdyn
 

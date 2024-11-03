@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """Command to plot figures."""
 import click
+
 from .root import cmd_root
 
 
@@ -8,18 +9,20 @@ from .root import cmd_root
 @click.argument(
     "dirname",
     default="./",
-    type=str,
+    type=str
 )
 @click.option(
     "-f",
     "--fakefermi",
     type=float,
-    help="The fake Fermi energy value given in command"
+    default=None,
+    help="Fermi energy for plotting. If given, eigenvalues will be shifted by this value."
 )
 def cmd_plotvaspbands(dirname, fakefermi):
-    """Plot vasp bands using the dirname providing EIGENVAL, KPOINTS, POSCAR, OUTCAR. 
-    
-    fakefermi is alternative (to set EF=0). """
+    """Plot VASP bands.
+
+    VASP bands are provided by a dirname including EIGENVAL, KPOINTS, POSCAR, and OUTCAR.
+    """
     from ..plot_vaspbands import plot_bands
 
     if fakefermi:

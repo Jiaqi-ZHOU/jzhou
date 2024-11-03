@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """Command to plot figures."""
 import click
+
 from .root import cmd_root
 
 
@@ -11,13 +12,13 @@ from .root import cmd_root
     type=str,
 )
 @click.option(
-    "-f", "--fakefermi", type=float, help="The fake Fermi energy value given in command"
+    "--fakefermi",
+    "-f",
+    type=float,
+    help="Fermi energy for plotting. If given, eigenvalues will be shifted by this value.",
 )
 def cmd_plotxmlbands(file, fakefermi):
-    """Plot QE bands using xml file.
-
-    shc.dat is mandatory, default is aiida.xml.
-    """
+    """Plot QE bands using xml file."""
     from ..plot_xmlbands import plot_bands
 
     # file = "aiida.xml"

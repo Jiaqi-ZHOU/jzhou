@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """Command to plot figures."""
 import click
+
 from .root import cmd_root
 
 
@@ -18,26 +19,24 @@ from .root import cmd_root
         # help="The Wannier dat file, default is aiida_band.dat",
     )
 @click.option(
-    "--wanfile2",                
-    # "-w2",
+    "--wanfile2",
+    "-w2",
     type=str,
-    # help="The fake Fermi energy value given in command"
+    help="The 2nd Wannier dat file."
 )
 @click.option(
     "-f",
     "--fakefermi",
     type=float,
-    # help="The fake Fermi energy value given in command"
+    help="Fermi energy for plotting. If given, eigenvalues will be shifted by this value."
 )
 
 def cmd_plotxmlwanbands(xmlfile, wanfile, wanfile2, fakefermi):
-    """Compare QE bands (xml) and Wannier bands (dat). 
-    
-    xml and dat files are mandatory. 
+    """Compare QE bands and Wannier bands.
 
-    The fakefermi is alternative (to set EF=0). "
+    QE bands are given by xml file, and Wannier bands are given dat files.
     """
-    from ..plot_xmlwanbands import plot_xml_wan_bands, find_occ_nbnd
+    from ..plot_xmlwanbands import find_occ_nbnd, plot_xml_wan_bands
 
     # file = "aiida.xml"
     print("DFT bands is given by", xmlfile)
@@ -48,7 +47,7 @@ def cmd_plotxmlwanbands(xmlfile, wanfile, wanfile2, fakefermi):
     if fakefermi:
         if wanfile2:
             print("Fermi energy is given as: ", fakefermi)
-            find_occ_nbnd(xmlfile, wanfile)    
+            # find_occ_nbnd(xmlfile, wanfile)
             plot_xml_wan_bands(xmlfile, wanfile, wanfile2, fakefermi)
         else:
             print("Fail. The function of fake fermi & none wanfile2 is unable.")
@@ -57,9 +56,9 @@ def cmd_plotxmlwanbands(xmlfile, wanfile, wanfile2, fakefermi):
     else:
         if wanfile:
             print("Fermi energy is given by xml file. ")
-            # find_occ_nbnd(xmlfile, wanfile)    
+            # find_occ_nbnd(xmlfile, wanfile)
             plot_xml_wan_bands(xmlfile, wanfile, wanfile2, fakefermi=None)
         else:
             print("Fermi energy is given by xml file. ")
-            # find_occ_nbnd(xmlfile, wanfile)    
+            # find_occ_nbnd(xmlfile, wanfile)
             plot_xml_wan_bands(xmlfile, wanfile, wanfile2=None, fakefermi=None)

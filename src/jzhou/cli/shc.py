@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """Command to plot figures."""
 import click
+
 from .root import cmd_root
 
 
@@ -18,18 +19,16 @@ from .root import cmd_root
     # help="The Wannier input. Default is aiida.win. ",
 )
 def cmd_plotshc(file, win):
-    """Plot shc vs energy.
+    """Plot spin Hall conductivity v.s. energy.
 
-    shc.dat is mandatory, default is aiida-shc-fermiscan.dat. 
-    
-    win is mandatory, default is aiida.win.
+    SHC is given by aiida-shc-fermiscan.dat, the unit conversion requires aiida.win.
     """
-    from ..plot_shc import read_file, read_win, plot
+    from ..plot_shc import plot, read_file, read_win
 
     data = read_file(file)
     print("shc.dat file is given by", file)
     print("win file is given by", win)
-    fermi, vbm, cbm, c = read_win(win)
+    fermi, vbm, cbm, clength = read_win(win)
     if cbm - vbm > 1e-6:  # This is an insulator
         fermi = vbm
         print("This is a insulator")
@@ -40,5 +39,5 @@ def cmd_plotshc(file, win):
         fermi = fermi
         print("This is a metal")
         print(f"{fermi=}")
-    clength = c
+    # clength = c
     plot(data, clength, fermi, vbm, cbm=cbm)

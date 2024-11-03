@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """Command to plot figures."""
 import click
+
 from .root import cmd_root
 
 
@@ -18,24 +19,25 @@ from .root import cmd_root
         # help="The Wannier dat file, default is aiida_band.dat",
     )
 @click.option(
-    "--wanfile2",                
-    # "-w2",
+    "--wanfile2",
+    "-w2",
     type=str,
-    # help="The fake Fermi energy value given in command"
+    help="The 2nd Wannier dat file."
 )
 @click.option(
-    "-f",
     "--fakefermi",
+    "-f",
     type=float,
-    # help="The fake Fermi energy value given in command"
+    help="Fermi energy for plotting. If given, eigenvalues will be shifted by this value."
 )
 
 def cmd_plotvaspwanbands(dirname, wanfile, wanfile2, fakefermi):
-    """Compare vasp bands (dirname providing EIGENVAL, KPOINTS, POSCAR, OUTCAR) and Wannier bands (dat). 
-    
-    The fakefermi is alternative (to set EF=0). "
+    """Compare VASP bands and Wannier bands.
+
+    VASP bands are provided by a dirname including EIGENVAL, KPOINTS, POSCAR, OUTCAR.
+    Wannier bands are given by aiida_band.dat or bulkek.dat.
     """
-    from ..plot_vaspwanbands import plot_vasp_wan_bands 
+    from ..plot_vaspwanbands import plot_vasp_wan_bands
 
     # file = "aiida.xml"
     print("DFT bands is given by the dirname providing EIGENVAL, KPOINTS, POSCAR, OUTCAR : ", dirname)
@@ -46,7 +48,7 @@ def cmd_plotvaspwanbands(dirname, wanfile, wanfile2, fakefermi):
     if fakefermi:
         if wanfile2:
             print("Fermi energy is given as: ", fakefermi)
-            # find_occ_nbnd(xmlfile, wanfile)    
+            # find_occ_nbnd(xmlfile, wanfile)
             plot_vasp_wan_bands(dirname, wanfile, wanfile2, fakefermi)
         else:
             print("Fail. The function of fake fermi & none wanfile2 is unable.")
@@ -55,9 +57,9 @@ def cmd_plotvaspwanbands(dirname, wanfile, wanfile2, fakefermi):
     else:
         if wanfile:
             print("Fermi energy is given by OUTCAR file. ")
-            # find_occ_nbnd(xmlfile, wanfile)    
+            # find_occ_nbnd(xmlfile, wanfile)
             plot_vasp_wan_bands(dirname, wanfile, wanfile2, fakefermi=None)
         else:
             print("Fermi energy is given by OUTCAR file. ")
-            # find_occ_nbnd(xmlfile, wanfile)    
+            # find_occ_nbnd(xmlfile, wanfile)
             plot_vasp_wan_bands(dirname, wanfile, wanfile2=None, fakefermi=None)
