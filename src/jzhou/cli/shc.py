@@ -20,7 +20,8 @@ from .root import cmd_root
 def cmd_plotshc(file, win):
     """Plot shc vs energy.
 
-    shc.dat is mandatory, default is aiida-shc-fermiscan.dat.
+    shc.dat is mandatory, default is aiida-shc-fermiscan.dat. 
+    
     win is mandatory, default is aiida.win.
     """
     from ..plot_shc import read_file, read_win, plot

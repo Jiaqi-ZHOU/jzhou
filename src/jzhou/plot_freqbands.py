@@ -68,13 +68,13 @@ def plot_freq_bands(filename):
         plt.plot(path, path_freq[:, i], color="k", linewidth=1)
 
     emin = np.min(path_freq[:, 1:])
-    emax = np.max(path_freq[:, 1:]) 
+    emax = np.max(path_freq[:, 1:])
     dist = 10
     plt.xlim(min(path), max(path))
     plt.ylim(emin - dist, emax + dist)
     plt.xlabel(r"q-path", fontsize=fontsizes.label)
     plt.ylabel(r"Frequency (cm$^{-1}$)", fontsize=fontsizes.label)
-    if filename == "phband.freq":
+    if "phband.freq" in filename:
         plt.ylabel(r"$\omega$ (meV)", fontsize=fontsizes.label)
     plt.xticks([])
     plt.yticks(fontsize=fontsizes.tick)
@@ -174,6 +174,6 @@ def main():
     print("QE freq bands is given by", args.freqfile)
 
     if args.matdyn:
-        plot_freq_bands_matdyn(filename=args.freqfile,matdyn=args.matdyn)
+        plot_freq_bands_matdyn(filename=args.freqfile, matdyn=args.matdyn)
     else:
         plot_freq_bands(filename=args.freqfile)

@@ -134,7 +134,7 @@ def plot_bands(dirname, fakefermi=None):
 
     realfermi = get_fermi(dirname)
 
-    plt.subplots(figsize=(4, 3), dpi=300)
+    plt.subplots(figsize=(4, 3), dpi=144)
 
     # If a fakefermi is not given, we use the real fermi to plot bands,
     # and the realfermi is extracted from eigenvales.

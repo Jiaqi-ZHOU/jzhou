@@ -199,7 +199,7 @@ def plot_DFT_bands(xmlfile, label, color, linestyle, fakefermi=None):
     nk = kpt_frac.shape[1]
     tick_locs_list = []
     tick_labels_list = []
-    thr = 2e-3 
+    thr = 2e-3
     ky = 0.5773502692
     for i in range(nk):
         if np.linalg.norm(kpt_frac[:, i]) < thr:
@@ -232,11 +232,14 @@ def plot_DFT_bands(xmlfile, label, color, linestyle, fakefermi=None):
     ax.legend(handles[::-1], labels[::-1], loc="upper right")
 
 
-
-def plot_two_DFT_bands(xmlfile1, label1,xmlfile2, label2, fakefermi=None):
-    plt.subplots(figsize=(4, 3), dpi=300)
-    plot_DFT_bands(xmlfile1, label1, color = colors.blue, linestyle="-", fakefermi=fakefermi)
-    plot_DFT_bands(xmlfile2, label2, color = colors.red, linestyle="--", fakefermi=fakefermi)
+def plot_two_DFT_bands(xmlfile1, label1, xmlfile2, label2, fakefermi=None):
+    plt.subplots(figsize=(4, 3), dpi=144)
+    plot_DFT_bands(
+        xmlfile1, label1, color=colors.blue, linestyle="-", fakefermi=fakefermi
+    )
+    plot_DFT_bands(
+        xmlfile2, label2, color=colors.red, linestyle="--", fakefermi=fakefermi
+    )
     plt.tight_layout()
     plt.show()
 
