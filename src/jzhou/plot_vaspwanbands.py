@@ -10,7 +10,7 @@ import argparse
 
 
 from .constant import fontsizes, colors
-from .plot_vaspbands import get_kpath_bands, get_fermi, xticks 
+from .plot_vaspbands import get_kpath_bands, get_fermi, xticks
 
 
 def get_wan_data(wannier_dat):
@@ -22,7 +22,7 @@ def get_wan_data(wannier_dat):
     # The output of open() is seperated string for every line
     seperated_str = file.readlines()
 
-    seperated_str = [line for line in seperated_str if not line.strip().startswith('#')]
+    seperated_str = [line for line in seperated_str if not line.strip().startswith("#")]
 
     # Combine all string to be one long string
     combined_long_str = "".join(seperated_str)
@@ -44,19 +44,19 @@ def get_wan_data(wannier_dat):
 
     split_block_list_of_array = [np.fromstring(_, sep=" ") for _ in split_block if _]
 
-    # Wannier90 generate prefix_band.dat including 2 columns. 
-    # WannierTools generate bulkek.dat including 3 columns. 
-    # I need to tell the code which is the case. 
-    WT=None
+    # Wannier90 generate prefix_band.dat including 2 columns.
+    # WannierTools generate bulkek.dat including 3 columns.
+    # I need to tell the code which is the case.
+    WT = None
     with open(wannier_dat, "r") as file:
         lines = file.readlines()
         # ['#', 'klen', 'E', '|', 'projection', '|group', '1:', 'A', '|group']
         if len(lines[0].split()) == 9:
             n = 3
-            WT=True
+            WT = True
         else:
             n = 2
-            WT=False
+            WT = False
 
     # Convert the list to array by adding one dimension (the number of nbnd(nwann))
     nbnd_kpt_energy = np.array(split_block_list_of_array)
@@ -65,13 +65,13 @@ def get_wan_data(wannier_dat):
     # The kpt_coor is the even line of the 2nd dimension
     # The energy is the odd line of the 2nd dimension
 
-
     wan_kpt = nbnd_kpt_energy[0, 0::n]
     wan_eig = nbnd_kpt_energy[:, 1::n]
 
     wan_eig = wan_eig.T  # For plotting
 
     return wan_kpt, wan_eig, WT
+
 
 def plot_vasp_wan_bands(dirname, wanfile, wanfile2, fakefermi=None):
 
@@ -80,7 +80,7 @@ def plot_vasp_wan_bands(dirname, wanfile, wanfile2, fakefermi=None):
     print("Fermi energy is {:.4f}".format(realfermi) + " eV.")
     print("kpath_len = ", len(kpath))
     print("bands.shape = ", bands.shape)
-    plt.subplots(figsize=(4, 3), dpi=300)
+    plt.subplots(figsize=(4, 3), dpi=144)
 
     # If a fakefermi is not given, we use the real fermi to plot bands,
     # and the realfermi is extracted from eigenvales.
@@ -132,7 +132,7 @@ def plot_vasp_wan_bands(dirname, wanfile, wanfile2, fakefermi=None):
     print("nbnd = " + str(nbnd))
     print("kpt_len = " + str(kpath.shape[0]))
     tick_locs_list, tick_labels_list = xticks(dirname)
-    print("High-symm kpoints are ", tick_labels_list )
+    print("High-symm kpoints are ", tick_labels_list)
     for n in range(1, len(tick_locs_list)):
         plt.plot(
             [tick_locs_list[n], tick_locs_list[n]],
@@ -145,12 +145,18 @@ def plot_vasp_wan_bands(dirname, wanfile, wanfile2, fakefermi=None):
 
     def plot_wan_bands(fermi, wanfile, color, linestyle):
         wan_kpt, wan_eig, WT = get_wan_data(wanfile)
-        plt.plot(wan_kpt, wan_eig - fermi, color=color, linestyle = linestyle, linewidth=1)
+        plt.plot(
+            wan_kpt, wan_eig - fermi, color=color, linestyle=linestyle, linewidth=1
+        )
 
         if WT == False:
-            plt.plot(1e8, 1e8, color=color, linestyle = linestyle,  linewidth=1, label=r"W90")
+            plt.plot(
+                1e8, 1e8, color=color, linestyle=linestyle, linewidth=1, label=r"W90"
+            )
         elif WT == True:
-            plt.plot(1e8, 1e8, color=color, linestyle = linestyle,  linewidth=1, label=r"WTools")
+            plt.plot(
+                1e8, 1e8, color=color, linestyle=linestyle, linewidth=1, label=r"WTools"
+            )
 
     if wanfile2 != None:
         plot_wan_bands(fermi=fermi, wanfile=wanfile, color=colors.blue, linestyle="-")
@@ -179,7 +185,7 @@ def main():
         "--dirname",
         default="./",
         type=str,
-        help="The dirname providing EIGENVAL, KPOINTS, POSCAR, OUTCAR, default is './'"
+        help="The dirname providing EIGENVAL, KPOINTS, POSCAR, OUTCAR, default is './'",
     )
     parser.add_argument(
         "--wanfile",
