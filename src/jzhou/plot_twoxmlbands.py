@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
-import numpy as np
-import matplotlib.pyplot as plt
-import math
-from matplotlib.gridspec import GridSpec
-from ase.units import Bohr
-from ase.units import Ha
-from ase.units import Ry
-from lxml import etree
 import argparse
+import math
 import xml.etree.ElementTree as ET
 
-from .constant import fontsizes, colors
+from ase.units import Bohr, Ha, Ry
+from lxml import etree
+from matplotlib.gridspec import GridSpec
+import matplotlib.pyplot as plt
+import numpy as np
+
+from .constant import colors, fontsizes
 
 
 def extract_band_weight_xml(filename: str = "aiida.xml"):
@@ -204,7 +203,10 @@ def plot_DFT_bands(xmlfile, label, color, linestyle, fakefermi=None):
             G_loc = kpath[i]
             tick_locs_list.append(G_loc)
             tick_labels_list.append(r"$\mathregular{\Gamma}$")
-        if np.linalg.norm(kpt_frac[:, i] - np.array([0, ky, 0])) < thr:
+        if (
+            np.linalg.norm(kpt_frac[:, i] - np.array([0.5, ky / 2, 0])) < thr
+            or np.linalg.norm(kpt_frac[:, i] - np.array([0, ky, 0])) < thr
+        ):
             M_loc = kpath[i]
             tick_locs_list.append(M_loc)
             tick_labels_list.append("M")
