@@ -1,5 +1,5 @@
 # jzhou
-Python script to plot QE, EPW, Wannier90, and WannierTools results.
+Python script to plot QuantumEspresso, EPW, Wannier90, and WannierTools results.
 
 ## Installation
 
