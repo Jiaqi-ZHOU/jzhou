@@ -38,3 +38,6 @@ pip install -e .
 
   ```jzhou plotshc  example/shc/metal/aiida-shc-fermiscan.dat  example/shc/metal/aiida.win```
 
+- Compare VASP, Wannier90, and WannierTools bands.
+
+  ```jzhou plotvaspwanbands example/eig/vasp/  example/eig/wannier90/wannier90_band_vasp.dat --wanfile2 example/eig/WannierTools/bulkek.dat```
