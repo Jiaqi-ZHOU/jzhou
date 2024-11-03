@@ -151,29 +151,3 @@ def plot_freq_bands_matdyn(filename, matdyn):
     # plt.savefig("phonon.png")
     plt.show()
 
-
-def main():
-    parser = argparse.ArgumentParser(
-        description="Plot QE or EPW freq data. \
-    aiida.freq or phband.freq is mandatory. \
-    Formatted matdyn.in is optinal. "
-    )
-    parser.add_argument(
-        "--freqfile",
-        type=str,
-        help="The QE freq file, default is aiida.freq.\\. ",
-    )
-
-    parser.add_argument(
-        "--matdyn",
-        type=str,
-        help="q points and labels",
-    )
-
-    args = parser.parse_args()
-    print("QE freq bands is given by", args.freqfile)
-
-    if args.matdyn:
-        plot_freq_bands_matdyn(filename=args.freqfile, matdyn=args.matdyn)
-    else:
-        plot_freq_bands(filename=args.freqfile)

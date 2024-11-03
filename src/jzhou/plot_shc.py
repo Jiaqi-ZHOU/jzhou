@@ -125,35 +125,3 @@ def plot(data, clength, fermi, vbm, cbm=None):
     plt.tight_layout()
     plt.show()
 
-
-def main():
-    parser = argparse.ArgumentParser(description="Plot shc v.s. energy. shc.dat is mandatory. win is mandatory. ")
-    parser.add_argument(
-        "--file",
-        default="aiida-shc-fermiscan.dat",
-        type=str,
-        help="The shc data file, default is aiida-shc-fermiscan.dat",
-    )
-    parser.add_argument(
-        "--win",
-        default="aiida.win",
-        type=str,
-        help="The Wannier input, default is aiida.win.",
-    )
-
-    args = parser.parse_args()
-    data = read_file(args.file)
-    print("shc.dat file is given by", args.file)
-
-    print("win file is given by", args.win)
-    fermi, vbm, cbm, c = read_win(args.win)
-    if vbm != 0:
-        fermi = vbm
-    else:
-        fermi = fermi
-    clength = c
-    plot(data, clength, fermi, vbm, cbm=cbm)
-
-
-if __name__ == "__main__":
-    main()

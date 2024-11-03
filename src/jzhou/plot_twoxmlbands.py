@@ -51,8 +51,6 @@ def extract_band_weight_xml(filename: str = "aiida.xml"):
     tree = etree.parse(filename)
     alat = float(getXmlElement(tree, "", parent="atomic_structure")[0].attrib["alat"])
 
-    from ase.units import Bohr
-
     alat *= Bohr
     nks = int(getXmlElement(tree, "nks")[0].text)
     # only for SOC case, no need to consider spin up and spin down
@@ -164,7 +162,7 @@ def plot_DFT_bands(xmlfile, label, color, linestyle, fakefermi=None):
     # mark the position of real fermi.
     else:
         fermi = fakefermi
-        plt.ylabel(r"$Energy (eV)", fontsize=fontsizes.label)
+        plt.ylabel(r"Energy (eV)", fontsize=fontsizes.label)
         plt.hlines(
             realfermi,
             min(kpath),
@@ -242,60 +240,3 @@ def plot_two_DFT_bands(xmlfile1, label1, xmlfile2, label2, fakefermi=None):
     )
     plt.tight_layout()
     plt.show()
-
-
-def main():
-    parser = argparse.ArgumentParser(
-        description="Compare two DFT bands using two xml. \
-        Two xmls file is mandatory. \
-        The Fake fermi energy is alternative (to set EF=0). "
-    )
-    parser.add_argument(
-        "--xmlfile1",
-        default="first.xml",
-        type=str,
-        help="The first xml file, default is first.xml",
-    )
-    parser.add_argument(
-        "--label1",
-        default="label1",
-        type=str,
-        help="The label for the first bands xml file, default is label1",
-    )
-    parser.add_argument(
-        "--xmlfile2",
-        default="second.xml",
-        type=str,
-        help="The second xml file, default is second.xml",
-    )
-    parser.add_argument(
-        "--label2",
-        default="label2",
-        type=str,
-        help="The label for the second bands xml file, default is label2",
-    )
-    parser.add_argument(
-        "--fakefermi", type=float, help="The fake Fermi energy value given in command"
-    )
-    args = parser.parse_args()
-    print("The first xml file is given by", args.xmlfile1)
-    print("The second xml file is given by", args.xmlfile2)
-
-    if args.fakefermi:
-        print("A given Fermi energy =", args.fakefermi)
-        plot_two_DFT_bands(
-            xmlfile1=args.xmlfile1,
-            label1=args.label1,
-            xmlfile2=args.xmlfile2,
-            label2=args.label2,
-            fakefermi=args.fakefermi,
-        )
-    else:
-        print("Fermi energy is given by xml file")
-        plot_two_DFT_bands(
-            xmlfile1=args.xmlfile1,
-            label1=args.label1,
-            xmlfile2=args.xmlfile2,
-            label2=args.label2,
-            fakefermi=None,
-        )

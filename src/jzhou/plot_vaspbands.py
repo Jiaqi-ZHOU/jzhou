@@ -183,28 +183,3 @@ def plot_bands(dirname, fakefermi=None):
     plt.tick_params(axis="y", which="both", direction="in")
     plt.tight_layout()
     plt.show()
-
-
-def main():
-    parser = argparse.ArgumentParser(
-        description="Plot vasp bands using the dirname providing EIGENVAL, KPOINTS, POSCAR, OUTCAR. fakefermi is alternative (to set EF=0). "
-    )
-    parser.add_argument(
-        "--dirname",
-        default="./",
-        type=str,
-        help="The dirname providing EIGENVAL, KPOINTS, POSCAR, OUTCAR, default is './'"
-    )
-    parser.add_argument(
-        "--fakefermi", type=float, help="The fake Fermi energy value given in command"
-    )
-    args = parser.parse_args()
-    # print("QE bands is given by", args.file)
-
-    if args.fakefermi:
-        print("A given Fermi energy =", args.fakefermi)
-        plot_bands(filename = args.file, fakefermi = args.fakefermi)
-    else:
-        print("Fermi energy is given by bands OUTCAR")
-        plot_bands(filename = args.file, fakefermi = None)
-

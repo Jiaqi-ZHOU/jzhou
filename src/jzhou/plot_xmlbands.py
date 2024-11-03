@@ -51,8 +51,6 @@ def extract_band_weight_xml(filename: str = "aiida.xml"):
     tree = etree.parse(filename)
     alat = float(getXmlElement(tree, "", parent="atomic_structure")[0].attrib["alat"])
 
-    from ase.units import Bohr
-
     alat *= Bohr
     nks = int(getXmlElement(tree, "nks")[0].text)
     # only for SOC case, no need to consider spin up and spin down
@@ -222,27 +220,3 @@ def plot_bands(filename, fakefermi=None):
     plt.tick_params(axis="y", which="both", direction="in")
     plt.tight_layout()
     plt.show()
-
-
-def main():
-    parser = argparse.ArgumentParser(
-        description="Plot QE bands using xml. xml file is mandatory. fakefermi is alternative (to set EF=0). "
-    )
-    parser.add_argument(
-        "--file",
-        default="aiida.xml",
-        type=str,
-        help="The bands xml file, default is aiida.xml",
-    )
-    parser.add_argument(
-        "--fakefermi", type=float, help="The fake Fermi energy value given in command"
-    )
-    args = parser.parse_args()
-    print("QE bands is given by", args.file)
-
-    if args.fakefermi:
-        # print("A given Fermi energy =", args.fakefermi)
-        plot_bands(filename=args.file, fakefermi=args.fakefermi)
-    else:
-        # print("Fermi energy is given by xml file")
-        plot_bands(filename=args.file, fakefermi=None)
