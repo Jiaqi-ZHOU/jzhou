@@ -76,8 +76,6 @@ def plot_vasp_wan_bands(dirname, wanfile, wanfile2, fakefermi=None):
     realfermi = get_fermi(dirname)
     kpath, bands = get_kpath_bands(dirname)
     print(f"Fermi energy is {realfermi:.4f}" + " eV.")
-    print("kpath_len = ", len(kpath))
-    print("bands.shape = ", bands.shape)
     plt.subplots(figsize=(4, 3), dpi=144)
 
     # If a fakefermi is not given, we use the real fermi to plot bands,
@@ -128,7 +126,7 @@ def plot_vasp_wan_bands(dirname, wanfile, wanfile2, fakefermi=None):
                 edgecolors=colors.green,
             )
     print("nbnd = " + str(nbnd))
-    print("kpt_len = " + str(kpath.shape[0]))
+    print("nkpt = " + str(kpath.shape[0]))
     tick_locs_list, tick_labels_list = xticks(dirname)
     print("High-symm kpoints are ", tick_labels_list)
     for n in range(1, len(tick_locs_list)):

@@ -1,27 +1,26 @@
 #!/usr/bin/env python3
-import numpy as np
-import matplotlib.pyplot as plt
-import math
-from matplotlib.gridspec import GridSpec
-from ase.units import Bohr
-from ase.units import Ha
-from ase.units import Ry
-from lxml import etree
 import argparse
+import math
 import xml.etree.ElementTree as ET
 
-from .constant import fontsizes, colors
+from ase.units import Bohr, Ha, Ry
+from lxml import etree
+from matplotlib.gridspec import GridSpec
+import matplotlib.pyplot as plt
+import numpy as np
+
+from .constant import colors, fontsizes
 
 
 def get_eigenval_info(dirname):
     eigenval_file = dirname + 'EIGENVAL'
-    with open(eigenval_file, "r") as f:
+    with open(eigenval_file) as f:
         f.readline()
         f.readline()
         f.readline()
         f.readline()
         f.readline()
-        numbers = f.readline().split()   
+        numbers = f.readline().split()
 
         nelec = int(numbers[0])
         nks = int(numbers[1])
@@ -60,10 +59,10 @@ def get_poscar_info(dirname):
         a1 = np.array(a1)
         a2 = np.array(a2)
         a3 = np.array(a3)
-        
+
         # Calculate the volume of the parallelepiped (scalar triple product)
         V = np.dot(a1, np.cross(a2, a3))
-        
+
         # Calculate the reciprocal lattice vectors
         b1 = 2 * np.pi * np.cross(a2, a3) / V
         b2 = 2 * np.pi * np.cross(a3, a1) / V
@@ -89,8 +88,8 @@ def get_kpath_bands(dirname):
             Dk = np.linalg.norm(kpts_cart[i+1, :] - kpts_cart[i, :])
             D = D + Dk
             kpath[i+1] = D
-        return kpath 
-    
+        return kpath
+
     kpath =  get_kpath(kpts_cart)
 
     return kpath, bands
@@ -98,21 +97,21 @@ def get_kpath_bands(dirname):
 
 def get_fermi(dirname):
     outcar = dirname + "/OUTCAR"
-    with open(outcar, 'r') as f:
+    with open(outcar) as f:
         lines = f.readlines()
-    
+
     for line in lines:
         if len(line.split()) == 3 and line.split()[0] == 'Fermi':
             fermi = float(line.split()[-1])
             break
-    return fermi 
+    return fermi
 
 def xticks(dirname):
     kpoints = dirname + "/KPOINTS"
-    with open(kpoints, 'r') as f:
+    with open(kpoints) as f:
         line = f.readline()
         xlabels = line.split()[-1].split("-")
-        line = f.readline() 
+        line = f.readline()
         nk = int(float(line))
     nlab = len(xlabels)
     _ = np.arange(0, nk * nlab, nk)
@@ -125,8 +124,8 @@ def xticks(dirname):
     replace_gamma = lambda tick_labels: list(_.replace("G", r"$\Gamma$") for _ in tick_labels)
     xlabels = replace_gamma(xlabels)
     # print(xtick_locs)
-    
-    return xtick_locs, xlabels 
+
+    return xtick_locs, xlabels
 
 def plot_bands(dirname, fakefermi=None):
 
@@ -146,8 +145,8 @@ def plot_bands(dirname, fakefermi=None):
         )
         plt.ylim(-3, 3)
 
-    # If a fakefermi is given (probably as 0), I will want to 
-        # mark the position of real fermi. 
+    # If a fakefermi is given (probably as 0), I will want to
+        # mark the position of real fermi.
     else:
         fermi = fakefermi
         plt.ylabel(r"$Energy (eV)", fontsize=fontsizes.label)
@@ -163,7 +162,7 @@ def plot_bands(dirname, fakefermi=None):
 
     nbnd = bands.shape[1]
     print("nbnd = " + str(nbnd))
-    print("kpt_len = " + str(kpath.shape[0]))
+    print("nkpt = " + str(kpath.shape[0]))
     for i in range(nbnd):
         plt.plot(kpath, bands[:, i] - fermi, color="k", linewidth=1)
     plt.xlim(min(kpath), max(kpath))

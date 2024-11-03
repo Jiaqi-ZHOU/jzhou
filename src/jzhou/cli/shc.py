@@ -31,13 +31,13 @@ def cmd_plotshc(file, win):
     fermi, vbm, cbm, clength = read_win(win)
     if cbm - vbm > 1e-6:  # This is an insulator
         fermi = vbm
-        print("This is a insulator")
+        print("The material is an insulator")
         print(f"{cbm=}")
         print(f"{vbm=}")
         print("Bandgap=", cbm - vbm)
     else:
         fermi = fermi
-        print("This is a metal")
+        print("The material is a metal")
         print(f"{fermi=}")
     # clength = c
     plot(data, clength, fermi, vbm, cbm=cbm)
