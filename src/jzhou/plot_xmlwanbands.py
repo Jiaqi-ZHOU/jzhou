@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.gridspec import GridSpec
-from ase.units import Bohr
-from ase.units import Ha
-from ase.units import Ry
-from lxml import etree
 import argparse
 
+from ase.units import Bohr, Ha, Ry
+from lxml import etree
+from matplotlib.gridspec import GridSpec
+import matplotlib.pyplot as plt
+import numpy as np
 
-from .constant import fontsizes, colors
+from .constant import colors, fontsizes
 from .plot_xmlbands import extract_band_weight_xml
 
 
@@ -48,7 +46,7 @@ def get_wan_data(wannier_dat):
     # WannierTools generate bulkek.dat including 3 columns.
     # I need to tell the code which is the case.
     WT = None
-    with open(wannier_dat, "r") as file:
+    with open(wannier_dat) as file:
         lines = file.readlines()
         # ['#', 'klen', 'E', '|', 'projection', '|group', '1:', 'A', '|group']
         if len(lines[0].split()) == 9:
@@ -89,7 +87,7 @@ def find_occ_nbnd(xmlfile, wanfile):
 def plot_xml_wan_bands(xmlfile, wanfile, wanfile2, fakefermi=None):
 
     kpt_frac, kpath, bands, realfermi = extract_band_weight_xml(xmlfile)
-    print("Fermi energy in xml is {:.4f}".format(realfermi) + " eV.")
+    print(f"Fermi energy in xml is {realfermi:.4f}" + " eV.")
 
     plt.subplots(figsize=(4, 3), dpi=144)
 
@@ -165,30 +163,6 @@ def plot_xml_wan_bands(xmlfile, wanfile, wanfile2, fakefermi=None):
             K_loc = kpath[i]
             tick_locs_list.append(K_loc)
             tick_labels_list.append("K")
-    # For alphaBi
-    # nk = kpt_frac.shape[1]
-    # tick_locs_list = []
-    # tick_labels_list = []
-    # thr = 5e-3
-    # kx = 0.5
-    # ky = 4.664826304030108E-001
-    # for i in range(nk):
-    #     if np.linalg.norm(kpt_frac[:, i]) < thr:
-    #         G_loc = kpath[i]
-    #         tick_locs_list.append(G_loc)
-    #         tick_labels_list.append(r"$\mathregular{\Gamma}$")
-    #     if np.linalg.norm(kpt_frac[:, i] - np.array([kx, 0, 0])) < thr or np.linalg.norm(kpt_frac[:, i] - np.array([kx, 0, 0])) < thr:
-    #         X_loc = kpath[i]
-    #         tick_locs_list.append(X_loc)
-    #         tick_labels_list.append("X")
-    #     if np.linalg.norm(kpt_frac[:, i] - np.array([0, ky, 0])) < thr or np.linalg.norm(kpt_frac[:, i] - np.array([0, ky, 0])) < thr:
-    #         Y_loc = kpath[i]
-    #         tick_locs_list.append(Y_loc)
-    #         tick_labels_list.append("Y")
-    #     if np.linalg.norm(kpt_frac[:, i] - np.array([kx, ky, 0])) < thr:
-    #         M_loc = kpath[i]
-    #         tick_locs_list.append(M_loc)
-    #         tick_labels_list.append("M")
 
     for n in range(1, len(tick_locs_list)):
         plt.plot(
@@ -205,21 +179,13 @@ def plot_xml_wan_bands(xmlfile, wanfile, wanfile2, fakefermi=None):
         plt.plot(
             wan_kpt, wan_eig - fermi, color=color, linestyle=linestyle, linewidth=1
         )
+        plt.plot(
+            1e8, 1e8, color=color, linestyle=linestyle, linewidth=1, label=r"WTools" if WT else r"W90"
+        )
 
-        if WT == False:
-            plt.plot(
-                1e8, 1e8, color=color, linestyle=linestyle, linewidth=1, label=r"W90"
-            )
-        elif WT == True:
-            plt.plot(
-                1e8, 1e8, color=color, linestyle=linestyle, linewidth=1, label=r"WTools"
-            )
-
-    if wanfile2 != None:
-        plot_wan_bands(fermi=fermi, wanfile=wanfile, color=colors.blue, linestyle="-")
+    plot_wan_bands(fermi=fermi, wanfile=wanfile, color=colors.blue, linestyle="-")
+    if wanfile2:
         plot_wan_bands(fermi=fermi, wanfile=wanfile2, color=colors.red, linestyle=":")
-    else:
-        plot_wan_bands(fermi=fermi, wanfile=wanfile, color=colors.blue, linestyle="-")
 
     plt.tick_params(axis="x", which="both", direction="in")
     plt.tick_params(axis="y", which="both", direction="in")

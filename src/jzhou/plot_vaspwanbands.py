@@ -1,16 +1,14 @@
 #!/usr/bin/env python3
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.gridspec import GridSpec
-from ase.units import Bohr
-from ase.units import Ha
-from ase.units import Ry
-from lxml import etree
 import argparse
 
+from ase.units import Bohr, Ha, Ry
+from lxml import etree
+from matplotlib.gridspec import GridSpec
+import matplotlib.pyplot as plt
+import numpy as np
 
-from .constant import fontsizes, colors
-from .plot_vaspbands import get_kpath_bands, get_fermi, xticks
+from .constant import colors, fontsizes
+from .plot_vaspbands import get_fermi, get_kpath_bands, xticks
 
 
 def get_wan_data(wannier_dat):
@@ -48,7 +46,7 @@ def get_wan_data(wannier_dat):
     # WannierTools generate bulkek.dat including 3 columns.
     # I need to tell the code which is the case.
     WT = None
-    with open(wannier_dat, "r") as file:
+    with open(wannier_dat) as file:
         lines = file.readlines()
         # ['#', 'klen', 'E', '|', 'projection', '|group', '1:', 'A', '|group']
         if len(lines[0].split()) == 9:
@@ -77,7 +75,7 @@ def plot_vasp_wan_bands(dirname, wanfile, wanfile2, fakefermi=None):
 
     realfermi = get_fermi(dirname)
     kpath, bands = get_kpath_bands(dirname)
-    print("Fermi energy is {:.4f}".format(realfermi) + " eV.")
+    print(f"Fermi energy is {realfermi:.4f}" + " eV.")
     print("kpath_len = ", len(kpath))
     print("bands.shape = ", bands.shape)
     plt.subplots(figsize=(4, 3), dpi=144)
@@ -148,21 +146,13 @@ def plot_vasp_wan_bands(dirname, wanfile, wanfile2, fakefermi=None):
         plt.plot(
             wan_kpt, wan_eig - fermi, color=color, linestyle=linestyle, linewidth=1
         )
+        plt.plot(
+            1e8, 1e8, color=color, linestyle=linestyle, linewidth=1, label=r"WTools" if WT else r"W90"
+        )
 
-        if WT == False:
-            plt.plot(
-                1e8, 1e8, color=color, linestyle=linestyle, linewidth=1, label=r"W90"
-            )
-        elif WT == True:
-            plt.plot(
-                1e8, 1e8, color=color, linestyle=linestyle, linewidth=1, label=r"WTools"
-            )
-
-    if wanfile2 != None:
-        plot_wan_bands(fermi=fermi, wanfile=wanfile, color=colors.blue, linestyle="-")
+    plot_wan_bands(fermi=fermi, wanfile=wanfile, color=colors.blue, linestyle="-")
+    if wanfile2:
         plot_wan_bands(fermi=fermi, wanfile=wanfile2, color=colors.red, linestyle=":")
-    else:
-        plot_wan_bands(fermi=fermi, wanfile=wanfile, color=colors.blue, linestyle="-")
 
     plt.tick_params(axis="x", which="both", direction="in")
     plt.tick_params(axis="y", which="both", direction="in")
