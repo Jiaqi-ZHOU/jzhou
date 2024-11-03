@@ -1,45 +1,47 @@
 #!/usr/bin/env python
 """Command to plot figures."""
 import click
+
 from .root import cmd_root
 
 
-@cmd_root.command("plottwoxmlbands")
+@cmd_root.command("plottwoxmlbands", context_settings={'show_default': True})
 @click.argument(
     "xmlfile1",
-    default="first.xml",
-    type=str,
-)
-@click.argument(
-    "label1",
-    default="label1",
-    type=str,
-)
-@click.argument(
-    "xmlfile2",
-    default="second.xml",
-    type=str,
-)
-@click.argument(
-    "label2",
-    default="label2",
     type=str,
 )
 @click.option(
-    "-f", "--fakefermi", type=float, help="The fake Fermi energy value given in command"
+    "-l1",
+    "--label1",
+    default="label1",
+    type=str,
+    help="Legend for the 1st xml file"
+)
+@click.argument(
+    "xmlfile2",
+    type=str,
+)
+@click.option(
+    "-l2",
+    "--label2",
+    default="label2",
+    type=str,
+    help="Legend for the 2nd xml file"
+)
+@click.option(
+    "-f", "--fakefermi", default=None, type=float, help="Fermi energy for plotting. If given, eigenvalues will be shifted by this value."
 )
 def cmd_plottwoxmlbands(xmlfile1, xmlfile2, label1, label2, fakefermi):
-    """Compare two DFT bands using two xml. \
-        Two xmls file is mandatory. \
-        The Fake fermi energy is alternative (to set EF=0). """
-    
+    """Compare two DFT bands using two xml files."""
     from ..plot_twoxmlbands import plot_two_DFT_bands
 
-    print("The first xml file is given by", xmlfile1)
-    print("The second xml file is given by", xmlfile2)
+    # TODO revise README.md.
+
+    print("The 1st xml file is given by", xmlfile1)
+    print("The 2nd xml file is given by", xmlfile2)
 
     if fakefermi:
-        print("A given Fermi energy =", fakefermi)
+        print("Fermi energy is given as", fakefermi)
         plot_two_DFT_bands(
             xmlfile1=xmlfile1,
             label1=label1,
