@@ -123,7 +123,6 @@ def plot(data, clength, fermi, vbm, cbm=None):
     plt.tick_params(axis="x", which="both", direction="in")
     plt.tick_params(axis="y", which="both", direction="in")
     plt.tight_layout()
-    # fig.subplots_adjust()
     plt.show()
 
 
