@@ -42,3 +42,5 @@ pip install -e .
 - Plot spin Hall conductivity of 2D material, files are produced by postw90.x.
 
   ```jzhou plotshc example/shc/metal/aiida-shc-fermiscan.dat example/shc/metal/aiida.win```
+
+  ```jzhou plotshc example/shc/insulator/aiida-shc-fermiscan.dat example/shc/insulator/aiida.win```
