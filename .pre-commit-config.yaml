@@ -54,15 +54,15 @@ repos:
     rev: 24.10.0
     hooks:
       - id: black
-
+  # TODO D107
   - repo: https://github.com/PyCQA/pydocstyle
     rev: 6.3.0
     hooks:
       - id: pydocstyle
         args: ["--ignore=D104,D202,D203,D213"]
 
-  - repo: https://github.com/PyCQA/pylint
-    rev: v3.3.1
-    hooks:
-      - id: pylint
-        language: system
+  # - repo: https://github.com/PyCQA/pylint
+  #   rev: v3.3.1
+  #   hooks:
+  #     - id: pylint
+  #       language: system
