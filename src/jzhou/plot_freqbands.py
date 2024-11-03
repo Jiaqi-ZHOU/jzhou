@@ -84,7 +84,7 @@ def plot_freq_bands(filename):
         0, min(path), max(path), colors=colors.grey, linewidth=0.5, linestyles="-"
     )
     plt.tight_layout()
-    plt.savefig("phonon.png")
+    # plt.savefig("phonon.png")
     plt.show()
 
 
@@ -148,7 +148,7 @@ def plot_freq_bands_matdyn(filename, matdyn):
         0, min(path), max(path), colors=colors.grey, linewidth=0.5, linestyles="-"
     )
     plt.tight_layout()
-    plt.savefig("phonon.png")
+    # plt.savefig("phonon.png")
     plt.show()
 
 

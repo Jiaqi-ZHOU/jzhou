@@ -229,7 +229,7 @@ def plot_xml_wan_bands(xmlfile, wanfile, wanfile2, fakefermi=None):
     ax.legend(loc="upper right")
     # ax.legend(handles[::-1], labels[::-1], loc="upper right")
     plt.tight_layout()
-    plt.savefig("xmlwanbands.png")
+    # plt.savefig("xmlwanbands.png")
     plt.show()
 
 
