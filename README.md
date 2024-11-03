@@ -40,4 +40,8 @@ pip install -e .
 
 - Compare VASP, Wannier90, and WannierTools bands.
 
+<<<<<<< HEAD
   ```jzhou plotvaspwanbands example/eig/vasp/ example/eig/wannier90/wannier90_band_vasp.dat --wanfile2 example/eig/WannierTools/bulkek.dat```
+=======
+  ```jzhou plotvaspwanbands example/eig/vasp/  example/eig/wannier90/wannier90_band_vasp.dat --wanfile2 example/eig/WannierTools/bulkek.dat```
+>>>>>>> 0a423baca51fa46540d64fed5cdcaf1768d7553c
