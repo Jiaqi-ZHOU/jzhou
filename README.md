@@ -1,5 +1,5 @@
 # jzhou
-J Zhou's python script to plot QE, EPW, and Wannier90 results. 
+Python script to plot QE, EPW, Wannier90, and WannierTools results.
 
 ## Installation
 
@@ -11,30 +11,38 @@ pip install -e .
 
 ## Features
 
-- Plot QE bands with xml file given by bands.x. 
+- Plot QuantumEspresso bands with xml file given by bands.x.
 
   ```bash
   jzhou plotxmlbands example/eig/qe/aiida.xml
   ```
 
-- Plot QE phonon dispersion with freq file given by matdyn.x. 
+- Plot Wannier bands with dat files given by Wannier90 or WannierTools. Fermi energy is optional.
+
+  ```bash
+  jzhou plotwanbands example/eig/wannier90/aiida_band.dat -f -4.6002
+  jzhou plotwanbands example/eig/WannierTools/bulkek.dat -f -1.5175
+  ```
+
+- Plot QuantumEspresso phonon dispersion with freq file given by matdyn.x.
 
   ```bash
   jzhou plotfreqbands example/ph/qe/aiida.freq -m example/ph/qe/matdyn.in
   ```
+
 - Plot EPW phonon dispersion with phband.freq given by epw.x.
 
   ```bash
   jzhou plotfreqbands example/ph/epw/phband.freq
   ```
 
-- Compare two bands given by two xml files.
+- Compare two QuantumEspresso bands given by two xml files.
 
   ```bash
-  jzhou plottwoxmlbands example/eig/qe/aiida.xml Label1 example/eig/qe/aiida.xml Label2
+  jzhou plottwoxmlbands example/eig/qe/aiida.xml --label1 DFT1 example/eig/qe/aiida.xml --label2 DFT2
   ```
 
-- Compare QE bands and Wannier bands with xml and dat files. 
+- Compare QuantumEspresso bands and Wannier bands with xml and dat files.
 
   ```bash
   jzhou plotxmlwanbands example/eig/qe/aiida.xml example/eig/wannier90/aiida_band.dat
@@ -52,7 +60,7 @@ pip install -e .
   jzhou plotvaspwanbands example/eig/vasp/ example/eig/wannier90/wannier90_band_vasp.dat --wanfile2 example/eig/WannierTools/bulkek.dat
   ```
 
-- Plot spin Hall conductivity of 2D material, files are produced by postw90.x.
+- Plot spin Hall conductivity of 2D material with files produced by postw90.x.
 
   ```bash
   jzhou plotshc example/shc/metal/aiida-shc-fermiscan.dat example/shc/metal/aiida.win
